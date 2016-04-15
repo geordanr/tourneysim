@@ -66,7 +66,7 @@ class RandomTournament(Tournament):
             if validatePairings(pairs):
                 break
         else:
-            raise Exception("Could not generate random pairing after %d tries" % len(self.players) ** 2)
+            raise PairingError(self.players)
 
         return zip(pairs[::2], pairs[1::2])
 
@@ -130,7 +130,7 @@ class SwissTournament(Tournament):
                 if validatePairings(pairs):
                     return zip(pairs[::2], pairs[1::2])
 
-            raise Exception('Could not pair')
+            raise PairingError(self.players)
 
 class SingleEliminationTournament(Tournament):
     def __init__(self, players):
@@ -164,6 +164,11 @@ def validatePairings(pairs):
             return False
 
     return True
+
+class PairingError(Exception):
+    def __init__(self, players):
+        super(PairingError, self).__init__('Pairing error')
+        self.players = players
 
 def main():
     # RandomTournament(11, 3).run().showRankings()
