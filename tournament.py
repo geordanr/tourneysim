@@ -14,6 +14,8 @@ log = logging.getLogger(__name__)
 # log.setLevel(logging.DEBUG)
 
 class Tournament(object):
+    performance_sigma = 0.7
+
     def __init__(self, num_players, num_rounds):
         self.num_players = num_players
         self.num_rounds = num_rounds
@@ -28,7 +30,7 @@ class Tournament(object):
         for r in range(self.num_rounds):
             log.debug('<<< Round %d of %d', r + 1, self.num_rounds)
             for pairing in self.determinePairings(r):
-                pairing[0].play(pairing[1], elimination=self.elimination, elim_rank=len(self.elim_bracket) * 2)
+                pairing[0].play(pairing[1], scale=self.performance_sigma, elimination=self.elimination, elim_rank=len(self.elim_bracket) * 2)
             log.debug('>>> End of round %d of %d', r + 1, self.num_rounds)
 
         return self
